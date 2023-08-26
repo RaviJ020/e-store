@@ -1,0 +1,42 @@
+name: dockercompose13302041770076746816
+services:
+  mongo:
+    image: mongo
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 27017
+      published: "1234"
+      protocol: tcp
+    restart: always
+  mongo-express:
+    image: mongo-express
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 8081
+      published: "8081"
+      protocol: tcp
+    restart: always
+  shoppingcartservice:
+    build:
+      context: C:\Git\unit-testing\e-store
+      dockerfile: ShoppingCartService/Dockerfile
+    depends_on:
+      mongo:
+        condition: service_started
+        required: true
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: shoppingcartservice
+    networks:
+      default: null
+    ports:
+    - mode: ingress
+      target: 80
+      protocol: tcp
+networks:
+  default:
+    name: dockercompose13302041770076746816_default
